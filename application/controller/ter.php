@@ -12,7 +12,9 @@ class Ter extends Controller
   */
   public function index()
   {
-    echo "Index Ter";
+    require APP . 'view/_templates/header.php';
+    require APP . 'view/ter/index.php';
+    require APP . 'view/_templates/footer.php';
   }
 
 }
