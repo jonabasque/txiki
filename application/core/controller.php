@@ -1,5 +1,9 @@
 <?php
 
+use Illuminate\Database\Capsule\Manager as Eloquent;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
+
 class Controller
 {
     /**
@@ -17,8 +21,36 @@ class Controller
      */
     function __construct()
     {
-        $this->openDatabaseConnection();
-        $this->loadModel();
+        $this->openDatabaseConnectionEloquent();
+        //$this->loadModel();
+    }
+
+    private function openDataBaseConnectionEloquent(){
+
+      //Creamos la instancia
+      $this->db = new Eloquent;
+
+      //Configuramos la conexión
+      $this->db->addConnection([
+        'driver'  => DB_TYPE,
+        'host'    => DB_HOST,
+        'database'=> DB_NAME,
+        'username'=> DB_USER,
+        'password'=> DB_PASS,
+        'carset'  => 'utf8',
+        'collation'=>'utf8_unicode_ci',
+        'prefix'  =>''
+
+      ]);
+
+      //Lanzamos el evento con el container
+      $this->db->setEventDispatcher(new Dispatcher(new Container));
+
+      //Configuramos globalmente
+      $this->db->setAsGlobal();
+
+      $this->db->bootEloquent();
+
     }
 
     /**
