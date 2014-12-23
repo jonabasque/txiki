@@ -37,7 +37,7 @@ class Controller
         'database'=> DB_NAME,
         'username'=> DB_USER,
         'password'=> DB_PASS,
-        'carset'  => 'utf8',
+        'charset'  => 'utf8',
         'collation'=>'utf8_unicode_ci',
         'prefix'  =>''
 
@@ -79,6 +79,7 @@ class Controller
         // create new "model" (and pass the database connection)
         //El contructor del modelo no necesita DB.
         //$this->model = new Model($this->db);
-        return new $model_name;
+        $this->model = $model_name;
+        return new $model_name();
     }
 }
