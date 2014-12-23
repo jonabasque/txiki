@@ -73,10 +73,12 @@ class Controller
      * Loads the "model".
      * @return object model
      */
-    public function loadModel()
+    public function loadModel($model_name)
     {
-        require APP . '/model/model.php';
+        require APP . '/model/'.strtolower($model_name).'.php';
         // create new "model" (and pass the database connection)
-        $this->model = new Model($this->db);
+        //El contructor del modelo no necesita DB.
+        //$this->model = new Model($this->db);
+        return new $model_name;
     }
 }
