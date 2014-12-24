@@ -1,2 +1,3 @@
 #Ignora todos los achivos y directorios de /config
-config/*
+/.htaccess
+/application/config/*
