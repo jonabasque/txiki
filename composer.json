@@ -17,6 +17,7 @@
     },
     "require": {
         "php": ">=5.3.0",
-	"illuminate/database": "*"
+	"illuminate/database": "*",
+	"raveren/kint": "v0.9"
     }
 }

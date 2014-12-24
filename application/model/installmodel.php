@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class InstallModel extends EloquentModel{
 
+  public function __construct($db){
+
+    try {
+      $this->db = $db;
+    } catch (PDOException $e) {
+      exit('Database connection could not be established.');
+    }
+  }
+
   public function index(){
     echo "Hola desde del modelo de Install";
   }

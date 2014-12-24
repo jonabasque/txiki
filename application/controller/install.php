@@ -15,7 +15,7 @@ class Install extends Controller {
   public function index(){
 
     //$this->model->createScheme();
-    //print_r($this->model);
+    d($this->model);
     echo "Index de Install controller";
 
   }

@@ -3,6 +3,7 @@
 use Illuminate\Database\Capsule\Manager as Eloquent;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class Controller
 {
@@ -78,8 +79,7 @@ class Controller
         require APP . '/model/'.strtolower($model_name).'.php';
         // create new "model" (and pass the database connection)
         //El contructor del modelo no necesita DB.
-        //$this->model = new Model($this->db);
-        $this->model = $model_name;
-        return new $model_name();
+        $this->model = new $model_name($this->db);
+        return $this->model;
     }
 }
