@@ -3,6 +3,7 @@
 use Illuminate\Database\Capsule\Manager as Eloquent;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class Controller
 {
@@ -37,7 +38,7 @@ class Controller
         'database'=> DB_NAME,
         'username'=> DB_USER,
         'password'=> DB_PASS,
-        'carset'  => 'utf8',
+        'charset'  => 'utf8',
         'collation'=>'utf8_unicode_ci',
         'prefix'  =>''
 
@@ -73,10 +74,12 @@ class Controller
      * Loads the "model".
      * @return object model
      */
-    public function loadModel()
+    public function loadModel($model_name)
     {
-        require APP . '/model/model.php';
+        require APP . '/model/'.strtolower($model_name).'.php';
         // create new "model" (and pass the database connection)
-        $this->model = new Model($this->db);
+        //El contructor del modelo no necesita DB.
+        $this->model = new $model_name($this->db);
+        return $this->model;
     }
 }
