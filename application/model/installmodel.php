@@ -7,37 +7,72 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class InstallModel extends EloquentModel{
 
-  public function __construct($db){
+  protected $table = 'users';
 
-    try {
-      $this->db = $db;
-    } catch (PDOException $e) {
-      exit('Database connection could not be established.');
-    }
+  public function saludar(){
+    echo "Hola desde el modelo de Install!! sigue con la instalación XD";
   }
 
-  public function index(){
-    echo "Hola desde del modelo de Install";
-  }
+  public function createScheme($db) {
 
-  public function createScheme(){
-
+    //Renombrar tablas
+    //$this->db->schema()->rename('user','users');
+    //d($this->db);
     //Si no existe la tabla la creamos
-    if(!EloquentModel::schema()->hasTable('users')){
+    if($db->schema()->hasTable('users')) {
+      echo "HAy tabla!!";
 
-      EloquentModel::schema()->create('users', function($table){
-        //Definición de la tabla
+      /*
+      $this->db->schema()->create('users', function($table) {
+
         $table->increments('id');
-        $table->string('nombre');
+        $table->string('name');
         $table->string('email')->unique();
-        $table->longText('biografia');
-        $table->timestamps(); //Crea por defecto el created_at y el updated_at
+        $table->longText('bio');
+        $table->integer('rol');
+        $table->timestamps(); //Crea por defecto created_at y el updated_at
 
-        echo "Tabla creada con exito";
+        //$table->integer('id');
+        //$table->primary('id');
+        //$table->index('name');
 
-        header('location: ' . URL ."/install" );
+        //$table->foreign('rol')->references('id')->on('roles');
+
       });
+      */
+      /*
+      //Insertamos valores de prueba
+
+      $user = new UserModel;
+      $user->name = 'Carlos';
+      $user->email = 'micromante2@gmail.com';
+      $user->bio = 'Es programador';
+      $user->rol = 1;
+
+      $user->save();
+
+      $user = new UserModel;
+      $user->name = 'Kike';
+      $user->email = 'kike@escuela.it';
+      $user->bio = 'Es programador';
+      $user->rol = 2;
+
+      $user->save();
+
+      $user = new UserModel;
+      $user->name = 'Miguel';
+      $user->email = 'miguel@escuela.it';
+      $user->bio = 'Es programador';
+      $user->rol = 3;
+
+      $user->save();
+
+      */
+    }else{
+      echo "La tabla no existe";
     }
+
+
   }
 
 }

@@ -15,7 +15,7 @@ class Controller
     /**
      * @var null Model
      */
-    public $model = null;
+    //public $model = null;
 
     /**
      * Whenever controller is created, open a database connection too and load "the model".
@@ -76,10 +76,10 @@ class Controller
      */
     public function loadModel($model_name)
     {
+        d($this->db);
         require APP . '/model/'.strtolower($model_name).'.php';
         // create new "model" (and pass the database connection)
         //El contructor del modelo no necesita DB.
-        $this->model = new $model_name($this->db);
-        return $this->model;
+        return new $model_name();
     }
 }
