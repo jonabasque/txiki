@@ -8,6 +8,6 @@
     </script>
 
     <!-- our JavaScript -->
-    <script src="<?php echo URL; ?>js/application.js"></script>
+    <script src="<?php echo URL; ?>mini/js/application.js"></script>
 </body>
 </html>

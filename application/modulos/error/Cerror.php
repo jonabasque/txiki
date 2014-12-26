@@ -8,7 +8,7 @@
  * This is really weird behaviour, but documented here: http://php.net/manual/en/language.oop5.decon.php
  *
  */
-class Error extends Controller
+class Cerror extends Controlador
 {
     /**
      * PAGE: index
@@ -17,8 +17,6 @@ class Error extends Controller
     public function index()
     {
         // load views
-        require APP . 'view/_templates/header.php';
-        require APP . 'view/error/index.php';
-        require APP . 'view/_templates/footer.php';
+        require APP . 'modulos/'.$this->modulo.'/V'.$this->modulo.'/index.php';
     }
 }

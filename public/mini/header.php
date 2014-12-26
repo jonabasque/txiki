@@ -11,7 +11,7 @@
     <!-- See more here: http://stackoverflow.com/q/2105327/1114320 -->
 
     <!-- CSS -->
-    <link href="<?php echo URL; ?>css/style.css" rel="stylesheet">
+    <link href="<?php echo URL; ?>mini/css/style.css" rel="stylesheet">
 </head>
 <body>
     <!-- logo -->

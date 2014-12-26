@@ -9,7 +9,7 @@
  * This is really weird behaviour, but documented here: http://php.net/manual/en/language.oop5.decon.php
  *
  */
-class Songs extends Controller
+class Csongs extends Controlador
 {
     /**
      * PAGE: index
@@ -18,13 +18,11 @@ class Songs extends Controller
     public function index()
     {
         // getting all songs and amount of songs
-        $songs = $this->model->getAllSongs();
-        $amount_of_songs = $this->model->getAmountOfSongs();
+        //$songs = $this->model->getAllSongs();
+        //$amount_of_songs = $this->model->getAmountOfSongs();
 
        // load views. within the views we can echo out $songs and $amount_of_songs easily
-        require APP . 'view/_templates/header.php';
-        require APP . 'view/songs/index.php';
-        require APP . 'view/_templates/footer.php';
+        require APP . 'modulos/'.$this->modulo.'/V'.$this->modulo.'/index.php';
     }
 
     /**
@@ -92,7 +90,7 @@ class Songs extends Controller
             header('location: ' . URL . 'songs/index');
         }
     }
-    
+
     /**
      * ACTION: updateSong
      * This method handles what happens when you move to http://yourproject/songs/updatesong

@@ -8,7 +8,7 @@
  * This is really weird behaviour, but documented here: http://php.net/manual/en/language.oop5.decon.php
  *
  */
-class Home extends Controller
+class Chome extends Controlador
 {
     /**
      * PAGE: index
@@ -17,9 +17,7 @@ class Home extends Controller
     public function index()
     {
         // load views
-        require APP . 'view/_templates/header.php';
-        require APP . 'view/home/index.php';
-        require APP . 'view/_templates/footer.php';
+        require APP . 'modulos/home/Vhome/index.php';
     }
 
     /**

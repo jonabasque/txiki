@@ -1,85 +1,152 @@
 <?php
+echo "Archivo controller.php";
+echo "<br/>";
+// load application config (error reporting etc.)
+//require APP . '/config/config.php';
+require APP . '/core/modelo2.php';
+class Controlador{
 
-use Illuminate\Database\Capsule\Manager as Eloquent;
-use Illuminate\Events\Dispatcher;
-use Illuminate\Container\Container;
-use Illuminate\Database\Eloquent\Model as EloquentModel;
+	private $url_controller;
+	private $url_action;
+	private $url_params = array();
+	private $modelo;
 
-class Controller
+	protected $modulo;
+
+	public function __construct(){
+
+		// create array with URL parts in $url
+		$this->splitUrl();
+
+		//creamos el objeto modelo cargado para que pueda usar el controlador.
+		//$this->modelo = new Model();
+		$this->modulo = substr($this->url_controller,1);
+
+	}
+
+	function cargamodulo(){
+
+	// check for controller: no controller given ? then load start-page
+	if (!$this->url_controller) {
+
+		require APP . 'modulos/home/Chome.php';
+		$page = new Chome();
+		$page->index();
+
+	} elseif (file_exists(APP . 'modulos/'. $this->modulo .'/'. $this->url_controller . '.php')) {
+		// here we did check for controller: does such a controller exist ?
+
+		// if so, then load this file and create this controller
+		// example: if controller would be "car", then this line would translate into: $this->car = new car();
+		//Cargamos el controlador del modulo que nos piden y ...
+		require APP . 'modulos/'. $this->modulo .'/' . $this->url_controller . '.php';
+		//creamos un objeto con la clase del controlador del modulo.-
+		$this->url_controller = new $this->url_controller();
+
+		// check for method: does such a method exist in the controller ?
+		if (method_exists($this->url_controller, $this->url_action)) {
+
+			if (!empty($this->url_params)) {
+				// Call the method and pass arguments to it
+				call_user_func_array(array($this->url_controller, $this->url_action), $this->url_params);
+			} else {
+				// If no parameters are given, just call the method without parameters, like $this->home->method();
+				$this->url_controller->{$this->url_action}();
+			}
+
+		} else {
+			if (strlen($this->url_action) == 0) {
+				// no action defined: call the default index() method of a selected controller
+				$this->url_controller->index();
+			}
+			else {
+				header('location: ' . URL . 'error');
+			}
+		}
+	} else {
+		header('location: ' . URL . 'error');
+	}
+
+
+	/*
+	//cargar el modulo
+	$modulefile="modules/".$module."/c".$module.'.php';
+	include_once $modulefile;
+	$nclase="C".$module;
+	$objeto=new $nclase($module,$this->modelo);
+	*/
+	}
+
+private function splitUrl()
 {
-    /**
-     * @var null Database Connection
-     */
-    public $db = null;
+	if (isset($_GET['url'])) {
 
-    /**
-     * @var null Model
-     */
-    //public $model = null;
+		// split URL
+		$url = trim($_GET['url'], '/');
+		$url = filter_var($url, FILTER_SANITIZE_URL);
+		$url = explode('/', $url);
 
-    /**
-     * Whenever controller is created, open a database connection too and load "the model".
-     */
-    function __construct()
-    {
-        $this->openDatabaseConnectionEloquent();
-        //$this->loadModel();
-    }
+		// Put URL parts into according properties
+		// By the way, the syntax here is just a short form of if/else, called "Ternary Operators"
+		// @see http://davidwalsh.name/php-shorthand-if-else-ternary-operators
+		if (isset($url[0])){
+			$this->url_controller = 'C'.$url[0];
+		}else{
+			$this->url_controller = null;
+		}
+		if (isset($url[1])){
+			$this->url_action = $url[1].'_action';
+		}else{
+			$this->url_action = null;
+		}
 
-    private function openDataBaseConnectionEloquent(){
+		// Remove controller and action from the split URL
+		unset($url[0], $url[1]);
 
-      //Creamos la instancia
-      $this->db = new Eloquent;
+		// Rebase array keys and store the URL params
+		$this->url_params = array_values($url);
 
-      //Configuramos la conexión
-      $this->db->addConnection([
-        'driver'  => DB_TYPE,
-        'host'    => DB_HOST,
-        'database'=> DB_NAME,
-        'username'=> DB_USER,
-        'password'=> DB_PASS,
-        'charset'  => 'utf8',
-        'collation'=>'utf8_unicode_ci',
-        'prefix'  =>''
+		// for debugging. uncomment this if you have problems with the URL
+		echo 'Controller: ' . $this->url_controller . '<br>';
+		echo 'Action: ' . $this->url_action . '<br>';
+		echo 'Parameters: ' . print_r($this->url_params, true) . '<br>';
+	}
+}
 
-      ]);
 
-      //Lanzamos el evento con el container
-      $this->db->setEventDispatcher(new Dispatcher(new Container));
 
-      //Configuramos globalmente
-      $this->db->setAsGlobal();
 
-      $this->db->bootEloquent();
 
-    }
+	function comprobar_email($email){
+		$mail_correcto = 0;
 
-    /**
-     * Open the database connection with the credentials from application/config/config.php
-     */
-    private function openDatabaseConnection()
-    {
-        // set the (optional) options of the PDO connection. in this case, we set the fetch mode to
-        // "objects", which means all results will be objects, like this: $result->user_name !
-        // For example, fetch mode FETCH_ASSOC would return results like this: $result["user_name] !
-        // @see http://www.php.net/manual/en/pdostatement.fetch.php
-        $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING);
+		//compruebo unas cosas primeras
+		if ((strlen($email) >= 6) && (substr_count($email,"@") == 1) && (substr($email,0,1) != "@") && (substr($email,strlen($email)-1,1) != "@")){
+			if ((!strstr($email,"'")) && (!strstr($email,"\"")) && (!strstr($email,"\\")) && (!strstr($email,"\$")) && (!strstr($email," "))) {
 
-        // generate a database connection, using the PDO connector
-        // @see http://net.tutsplus.com/tutorials/php/why-you-should-be-using-phps-pdo-for-database-access/
-        $this->db = new PDO(DB_TYPE . ':host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET, DB_USER, DB_PASS, $options);
-    }
+				//miro si tiene caracter .
+				if (substr_count($email,".")>= 1){
+					//obtengo la terminacion del dominio
+					$term_dom = substr(strrchr ($email, '.'),1);
+					//compruebo que la terminación del dominio sea correcta
+					if (strlen($term_dom)>1 && strlen($term_dom)<5 && (!strstr($term_dom,"@")) ){
+						//compruebo que lo de antes del dominio sea correcto
+						$antes_dom = substr($email,0,strlen($email) - strlen($term_dom) - 1);
+						$caracter_ult = substr($antes_dom,strlen($antes_dom)-1,1);
+						if ($caracter_ult != "@" && $caracter_ult != "."){
+							$mail_correcto = 1;
+						}
+					}
+				}
+			}
 
-    /**
-     * Loads the "model".
-     * @return object model
-     */
-    public function loadModel($model_name)
-    {
-        d($this->db);
-        require APP . '/model/'.strtolower($model_name).'.php';
-        // create new "model" (and pass the database connection)
-        //El contructor del modelo no necesita DB.
-        return new $model_name();
-    }
+			if ($mail_correcto){
+				return 1;
+			}else{
+				return 0;
+			}
+		}
+
+
+	}
 }

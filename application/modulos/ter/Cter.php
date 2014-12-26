@@ -4,7 +4,7 @@ use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 
 
-class Ter extends Controller {
+class Cter extends Controlador {
 
   /**
   * PAGE: index
@@ -12,14 +12,12 @@ class Ter extends Controller {
   */
   public function index(){
 
-    $model = $this->loadModel('TerModel');
+    //$model = $this->loadModel('TerModel');
 
-    $data = $model->getAll(); // Ahora devuelve un error que hay que mirar.
+    //$data = $model->getAll(); // Ahora devuelve un error que hay que mirar.
 
-    print_r($model);
-    require APP . 'view/_templates/header.php';
-    require APP . 'view/ter/index.php';
-    require APP . 'view/_templates/footer.php';
+    //print_r($model);
+    require APP . 'modulos/'.$this->modulo.'/V'.$this->modulo.'/index.php';
   }
 
 }
