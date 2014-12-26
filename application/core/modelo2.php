@@ -1,82 +1,52 @@
 <?php
 class Modelo{
+
 	private $db;
-	var $database;
-	var $host;
-	var $username;
-	var $sgbd;
-	private $password;
-	
-	function Modelo($host,$user,$pass,$database ,$sgbd="mysql"){
-		$this->database=$database;
-		$this->username=$user;
-		$this->password=$pass;
-		$this->host=$host;
-		$this->sgbd=$sgbd;
-		$this->conecta();
+
+ 	function __construct(){
+
+		$this->openDatabaseConnection();
+	}
+
+	private function openDatabaseConnection()
+	{
+		// set the (optional) options of the PDO connection. in this case, we set the fetch mode to
+		// "objects", which means all results will be objects, like this: $result->user_name !
+		// For example, fetch mode FETCH_ASSOC would return results like this: $result["user_name] !
+		// @see http://www.php.net/manual/en/pdostatement.fetch.php
+		$options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING);
+		// generate a database connection, using the PDO connector
+		// @see http://net.tutsplus.com/tutorials/php/why-you-should-be-using-phps-pdo-for-database-access/
+		$this->db = new PDO(DB_TYPE . ':host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET, DB_USER, DB_PASS, $options);
 	}
 
 	function conecta(){
-		$this->db = NewADOConnection('mysql');
-		$this->db->Connect("localhost", "root", "", "clientes");
-	}
 
-	function consulta($sql) {
-		$result = $this->db->Execute($sql);
-		$arr_result=$this->processResult($result);
-		return $arr_result;
-	}
-
-	function insert ($sql){
-		$result = $this->db->Execute($sql);
-		//print_r($result);
-		return $this->db->Insert_ID();
-	}
-
-	function update ($sql){
-		$result = $this->db->Execute($sql);
-		//print_r($result);
-		return $this->db->Affected_Rows();
-	}
-
-	function delete ($sql){
-		$result = $this->db->Execute($sql);
-		//print_r($result);
-		return $this->db->Affected_Rows();
-	}
-
-	function processResult($result) {
-		$nombres=array();
-		if(!$result->EOF){
-			$k=0;
-			foreach ($result->fields as $j => $v){
-				if ($k==0) {
-					$k=1;
-				}else{
-					$nombres[]= $j;
-					$k=0;
-				}
-			}
-		}
-		$arr=array();
-		$i=0;
-		while (!$result->EOF) {
-			$arr[$i]=array();
-			$k=0;
-			foreach ($nombres as $j => $v){
-				$arr[$i][$v]= $result->fields[$v];
-			}
-			$i++;
-			$result->MoveNext();
-		}
-		return $arr;
-	}
-
-	function getTableColumns($table) {
-		return $this->db->MetaColumnNames($table);
 	}
 
 	function desconecta() {
 		$this->db->Close();
 	}
+
+	function create ($filtros){
+		$result = $this->db->Execute($filtros);
+		//print_r($result);
+		return $this->db->Insert_ID();
+	}
+
+	function read($filtros) {
+		$result = $this->db->Execute($filtros);
+		return $result;
+	}
+
+	function update ($filtros){
+		$result = $this->db->Execute($filtros);
+		//print_r($result);
+	}
+
+	function delete ($filtros){
+		$result = $this->db->Execute($filtros);
+		//print_r($result);
+	}
+
 }

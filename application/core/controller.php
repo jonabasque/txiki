@@ -1,6 +1,4 @@
 <?php
-echo "Archivo controller.php";
-echo "<br/>";
 // load application config (error reporting etc.)
 //require APP . '/config/config.php';
 require APP . '/core/modelo2.php';
@@ -9,8 +7,11 @@ class Controlador{
 	private $url_controller;
 	private $url_action;
 	private $url_params = array();
-	private $modelo;
 
+	//Tendremos un objeto con el modelo específico.
+	protected $modelo;
+
+	//Simplemente un string con el modulo cargado para usarlo.
 	protected $modulo;
 
 	public function __construct(){
@@ -18,9 +19,22 @@ class Controlador{
 		// create array with URL parts in $url
 		$this->splitUrl();
 
-		//creamos el objeto modelo cargado para que pueda usar el controlador.
-		//$this->modelo = new Model();
 		$this->modulo = substr($this->url_controller,1);
+
+	}
+
+	public function cargaModelo(){
+		//requerimos el modelo del modulo en el que estamos y ....
+		//...creamos un atributo con un objeto de la clase del modelo específico.
+		echo "Hola desde cargaModelo";
+		if($this->modulo == null){
+			require APP . 'modulos/home/Mhome.php';
+			$this->modelo = new Mhome();
+		}else{
+			require APP . 'modulos/'.$this->modulo.'/M'.$this->modulo.'.php';
+			$nclase = 'M'.$this->modulo;
+			$this->modelo = new $nclase();
+		}
 
 	}
 
@@ -77,45 +91,41 @@ class Controlador{
 	*/
 	}
 
-private function splitUrl()
-{
-	if (isset($_GET['url'])) {
+	private function splitUrl(){
 
-		// split URL
-		$url = trim($_GET['url'], '/');
-		$url = filter_var($url, FILTER_SANITIZE_URL);
-		$url = explode('/', $url);
+		if (isset($_GET['url'])) {
 
-		// Put URL parts into according properties
-		// By the way, the syntax here is just a short form of if/else, called "Ternary Operators"
-		// @see http://davidwalsh.name/php-shorthand-if-else-ternary-operators
-		if (isset($url[0])){
-			$this->url_controller = 'C'.$url[0];
-		}else{
-			$this->url_controller = null;
+			// split URL
+			$url = trim($_GET['url'], '/');
+			$url = filter_var($url, FILTER_SANITIZE_URL);
+			$url = explode('/', $url);
+
+			// Put URL parts into according properties
+			// By the way, the syntax here is just a short form of if/else, called "Ternary Operators"
+			// @see http://davidwalsh.name/php-shorthand-if-else-ternary-operators
+			if (isset($url[0])){
+				$this->url_controller = 'C'.$url[0];
+			}else{
+				$this->url_controller = null;
+			}
+			if (isset($url[1])){
+				$this->url_action = $url[1].'_action';
+			}else{
+				$this->url_action = null;
+			}
+
+			// Remove controller and action from the split URL
+			unset($url[0], $url[1]);
+
+			// Rebase array keys and store the URL params
+			$this->url_params = array_values($url);
+
+			// for debugging. uncomment this if you have problems with the URL
+			echo 'Controller: ' . $this->url_controller . '<br>';
+			echo 'Action: ' . $this->url_action . '<br>';
+			echo 'Parameters: ' . print_r($this->url_params, true) . '<br>';
 		}
-		if (isset($url[1])){
-			$this->url_action = $url[1].'_action';
-		}else{
-			$this->url_action = null;
-		}
-
-		// Remove controller and action from the split URL
-		unset($url[0], $url[1]);
-
-		// Rebase array keys and store the URL params
-		$this->url_params = array_values($url);
-
-		// for debugging. uncomment this if you have problems with the URL
-		echo 'Controller: ' . $this->url_controller . '<br>';
-		echo 'Action: ' . $this->url_action . '<br>';
-		echo 'Parameters: ' . print_r($this->url_params, true) . '<br>';
 	}
-}
-
-
-
-
 
 	function comprobar_email($email){
 		$mail_correcto = 0;

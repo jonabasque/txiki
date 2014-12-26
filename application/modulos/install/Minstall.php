@@ -1,13 +1,6 @@
 <?php
 
-use Illuminate\Database\Capsule\Manager as Eloquent;
-use Illuminate\Events\Dispatcher;
-use Illuminate\Container\Container;
-use Illuminate\Database\Eloquent\Model as EloquentModel;
-
-class InstallModel extends EloquentModel{
-
-  protected $table = 'users';
+class Minstall extends Modelo{
 
   public function saludar(){
     echo "Hola desde el modelo de Install!! sigue con la instalación XD";
