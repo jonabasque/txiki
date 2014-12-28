@@ -2,6 +2,11 @@
 
 class Msongs extends Modelo {
 
+
+    public function __construct(){
+      parent::__construct();
+    }
+
     /**
      * Get all songs from database
      */
