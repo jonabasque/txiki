@@ -1,7 +1,7 @@
 <?php
 class Mhome extends Modelo{
 
-  public function saludar(){
+  public function saludo(){
     echo "Hola desde el modelo de Install!! sigue con la instalación XD";
   }
 

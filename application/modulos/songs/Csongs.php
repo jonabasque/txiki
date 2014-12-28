@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Class Songs
  * This is a demo class.
@@ -9,20 +8,25 @@
  * This is really weird behaviour, but documented here: http://php.net/manual/en/language.oop5.decon.php
  *
  */
-class Csongs extends Controlador
-{
+class Csongs extends Controlador {
+
+    public function __construct(){
+
+      $this->carga_model();
+
+    }
     /**
      * PAGE: index
      * This method handles what happens when you move to http://yourproject/songs/index
      */
-    public function index()
-    {
-        // getting all songs and amount of songs
-        //$songs = $this->model->getAllSongs();
-        //$amount_of_songs = $this->model->getAmountOfSongs();
+    public function index_action(){
 
+        // getting all songs and amount of songs
+        $songs = $this->model->getAllSongs();
+        $amount_of_songs = $this->model->getAmountOfSongs();
+        d(Application::$controller);
        // load views. within the views we can echo out $songs and $amount_of_songs easily
-        require APP . 'modulos/'.$this->modulo.'/V'.$this->modulo.'/index.php';
+        require APP . 'modulos/songs/Vsongs/index.php';
     }
 
     /**
@@ -33,8 +37,7 @@ class Csongs extends Controlador
      * the user back to songs/index via the last line: header(...)
      * This is an example of how to handle a POST request.
      */
-    public function addSong()
-    {
+    public function addSong_action() {
         // if we have POST data to create a new song entry
         if (isset($_POST["submit_add_song"])) {
             // do addSong() in model/model.php
@@ -54,7 +57,7 @@ class Csongs extends Controlador
      * This is an example of how to handle a GET request.
      * @param int $song_id Id of the to-delete song
      */
-    public function deleteSong($song_id)
+    public function deleteSong_action($song_id)
     {
         // if we have an id of a song that should be deleted
         if (isset($song_id)) {
@@ -71,7 +74,7 @@ class Csongs extends Controlador
      * This method handles what happens when you move to http://yourproject/songs/editsong
      * @param int $song_id Id of the to-edit song
      */
-    public function editSong($song_id)
+    public function editSong_action($song_id)
     {
         // if we have an id of a song that should be edited
         if (isset($song_id)) {
@@ -82,9 +85,8 @@ class Csongs extends Controlador
             // redirect the user to an error page or similar
 
             // load views. within the views we can echo out $song easily
-            require APP . 'view/_templates/header.php';
-            require APP . 'view/songs/edit.php';
-            require APP . 'view/_templates/footer.php';
+            require APP . 'modulos/songs/Vsongs/edit.php';
+
         } else {
             // redirect user to songs index page (as we don't have a song_id)
             header('location: ' . URL . 'songs/index');
@@ -99,8 +101,7 @@ class Csongs extends Controlador
      * the user back to songs/index via the last line: header(...)
      * This is an example of how to handle a POST request.
      */
-    public function updateSong()
-    {
+    public function updateSong_action(){
         // if we have POST data to create a new song entry
         if (isset($_POST["submit_update_song"])) {
             // do updateSong() from model/model.php
@@ -112,15 +113,15 @@ class Csongs extends Controlador
     }
 
     /**
-     * AJAX-ACTION: ajaxGetStats
-     * TODO documentation
-     */
-    public function ajaxGetStats()
-    {
-        $amount_of_songs = $this->model->getAmountOfSongs();
+    * AJAX-ACTION: ajaxGetStats
+    * TODO documentation
+    */
+    public function ajaxGetStats_action(){
 
-        // simply echo out something. A supersimple API would be possible by echoing JSON here
-        echo $amount_of_songs;
+      $amount_of_songs = $this->model->getAmountOfSongs();
+
+      // simply echo out something. A supersimple API would be possible by echoing JSON here
+      echo $amount_of_songs;
     }
 
 }

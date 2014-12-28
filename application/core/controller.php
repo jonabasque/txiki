@@ -1,131 +1,56 @@
 <?php
 // load application config (error reporting etc.)
-//require APP . '/config/config.php';
-require APP . '/core/modelo2.php';
-class Controlador{
-
-	private $url_controller;
-	private $url_action;
-	private $url_params = array();
+abstract class Controlador {
 
 	//Tendremos un objeto con el modelo específico.
-	protected $modelo;
+	public $model;
 
-	//Simplemente un string con el modulo cargado para usarlo.
-	protected $modulo;
+	//tenemos objeto con el controlador del modulo cargado.
+	public $module_controller;
 
-	public function __construct(){
+	public $name_controller;
 
-		// create array with URL parts in $url
-		$this->splitUrl();
-
-		$this->modulo = substr($this->url_controller,1);
-
-	}
-
-	public function cargaModelo(){
+	public function carga_model(){
+		require APP . '/core/modelo2.php';
 		//requerimos el modelo del modulo en el que estamos y ....
 		//...creamos un atributo con un objeto de la clase del modelo específico.
-		echo "Hola desde cargaModelo";
-		if($this->modulo == null){
+		if(Application::$url_controller == null){
 			require APP . 'modulos/home/Mhome.php';
-			$this->modelo = new Mhome();
+			$this->model = new Mhome();
 		}else{
-			require APP . 'modulos/'.$this->modulo.'/M'.$this->modulo.'.php';
-			$nclase = 'M'.$this->modulo;
-			$this->modelo = new $nclase();
+			$name = substr(Application::$url_controller,1);
+			$name_model = 'M'.$name;
+			require APP . 'modulos/'.$name.'/'.$name_model.'.php';
+			$this->model = new $name_model();
 		}
-
 	}
 
-	function cargamodulo(){
+	public function carga_action(){
+		$action = Application::$url_action;
 
-	// check for controller: no controller given ? then load start-page
-	if (!$this->url_controller) {
+		//Si existe un metodo en el controller con el valor de url_action...
+		if ($action) {
 
-		require APP . 'modulos/home/Chome.php';
-		$page = new Chome();
-		$page->index();
-
-	} elseif (file_exists(APP . 'modulos/'. $this->modulo .'/'. $this->url_controller . '.php')) {
-		// here we did check for controller: does such a controller exist ?
-
-		// if so, then load this file and create this controller
-		// example: if controller would be "car", then this line would translate into: $this->car = new car();
-		//Cargamos el controlador del modulo que nos piden y ...
-		require APP . 'modulos/'. $this->modulo .'/' . $this->url_controller . '.php';
-		//creamos un objeto con la clase del controlador del modulo.-
-		$this->url_controller = new $this->url_controller();
-
-		// check for method: does such a method exist in the controller ?
-		if (method_exists($this->url_controller, $this->url_action)) {
-
-			if (!empty($this->url_params)) {
+			//Si hay parametos en la URL...
+			if (!empty(Application::$url_params)) {
 				// Call the method and pass arguments to it
-				call_user_func_array(array($this->url_controller, $this->url_action), $this->url_params);
-			} else {
-				// If no parameters are given, just call the method without parameters, like $this->home->method();
-				$this->url_controller->{$this->url_action}();
+				// Llamamos al metodo del objeto en cuestion y le pasamos los argumentos del segundo parámetros.
+				call_user_func_array(array(Application::$controller, $action), Application::$url_params);
+			}else {
+					// If no parameters are given, just call the method without parameters, like $this->home->method();
+				$this->$action();
 			}
 
-		} else {
-			if (strlen($this->url_action) == 0) {
+		}else {
+			if (strlen(Application::$url_action) == 0) {
 				// no action defined: call the default index() method of a selected controller
-				$this->url_controller->index();
-			}
-			else {
+				$this->index_action();
+			}else {
 				header('location: ' . URL . 'error');
 			}
 		}
-	} else {
-		header('location: ' . URL . 'error');
 	}
 
-
-	/*
-	//cargar el modulo
-	$modulefile="modules/".$module."/c".$module.'.php';
-	include_once $modulefile;
-	$nclase="C".$module;
-	$objeto=new $nclase($module,$this->modelo);
-	*/
-	}
-
-	private function splitUrl(){
-
-		if (isset($_GET['url'])) {
-
-			// split URL
-			$url = trim($_GET['url'], '/');
-			$url = filter_var($url, FILTER_SANITIZE_URL);
-			$url = explode('/', $url);
-
-			// Put URL parts into according properties
-			// By the way, the syntax here is just a short form of if/else, called "Ternary Operators"
-			// @see http://davidwalsh.name/php-shorthand-if-else-ternary-operators
-			if (isset($url[0])){
-				$this->url_controller = 'C'.$url[0];
-			}else{
-				$this->url_controller = null;
-			}
-			if (isset($url[1])){
-				$this->url_action = $url[1].'_action';
-			}else{
-				$this->url_action = null;
-			}
-
-			// Remove controller and action from the split URL
-			unset($url[0], $url[1]);
-
-			// Rebase array keys and store the URL params
-			$this->url_params = array_values($url);
-
-			// for debugging. uncomment this if you have problems with the URL
-			echo 'Controller: ' . $this->url_controller . '<br>';
-			echo 'Action: ' . $this->url_action . '<br>';
-			echo 'Parameters: ' . print_r($this->url_params, true) . '<br>';
-		}
-	}
 
 	function comprobar_email($email){
 		$mail_correcto = 0;
@@ -156,7 +81,5 @@ class Controlador{
 				return 0;
 			}
 		}
-
-
 	}
 }

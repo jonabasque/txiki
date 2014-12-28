@@ -1,14 +1,15 @@
 <?php
 class Modelo{
 
-	private $db;
+	public $db;
 
  	function __construct(){
 
 		$this->openDatabaseConnection();
+		
 	}
 
-	private function openDatabaseConnection()
+	public function openDatabaseConnection()
 	{
 		// set the (optional) options of the PDO connection. in this case, we set the fetch mode to
 		// "objects", which means all results will be objects, like this: $result->user_name !

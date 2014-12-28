@@ -16,7 +16,6 @@ class Cter extends Controlador {
 
     //$data = $model->getAll(); // Ahora devuelve un error que hay que mirar.
 
-    //print_r($model);
     require APP . 'modulos/'.$this->modulo.'/V'.$this->modulo.'/index.php';
   }
 
