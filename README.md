@@ -1,4 +1,8 @@
-## Requirements
+## Code status
+
+Build status (master branch) [![Build Status](https://travis-ci.org/jonabasque/MahaiJokoak.svg?branch=master)](https://travis-ci.org/jonabasque/MahaiJokoak)
+
+## Requirements00
 
 - PHP 5.3.0+
 - MySQL
