@@ -119,10 +119,10 @@ class Csongs extends Controlador {
     */
     public function ajaxGetStats_action(){
 
-      $amount_of_songs = $this->model->getAmountOfSongs();
+      $amount_of_songs = $this->model->getAmountOfSongs('song');
 
       // simply echo out something. A supersimple API would be possible by echoing JSON here
-      echo $amount_of_songs;
+      echo count($amount_of_songs);
     }
 
 }
