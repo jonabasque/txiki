@@ -5,11 +5,11 @@
         <h3>Add a song</h3>
         <form action="<?php echo URL; ?>songs/addsong" method="POST">
             <label>Artist</label>
-            <input type="text" name="artist" value="" required />
+            <input type="text" name="params[artist]" value="" required />
             <label>Track</label>
-            <input type="text" name="track" value="" required />
+            <input type="text" name="params[track]" value="" required />
             <label>Link</label>
-            <input type="text" name="link" value="" />
+            <input type="text" name="params[link]" value="" />
             <input type="submit" name="submit_add_song" value="Submit" />
         </form>
     </div>

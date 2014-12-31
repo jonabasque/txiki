@@ -24,7 +24,7 @@ class Csongs extends Controlador {
         // getting all songs and amount of songs
         $songs = $this->model->getAllSongs();
         $amount_of_songs = $this->model->getAmountOfSongs();
-        d(Application::$controller);
+        //d(Application::$controller);
        // load views. within the views we can echo out $songs and $amount_of_songs easily
         require APP . 'modulos/songs/Vsongs/index.php';
     }
@@ -38,10 +38,11 @@ class Csongs extends Controlador {
      * This is an example of how to handle a POST request.
      */
     public function addSong_action() {
+        echo "Hola desde addSong action";
         // if we have POST data to create a new song entry
         if (isset($_POST["submit_add_song"])) {
             // do addSong() in model/model.php
-            $this->model->addSong($_POST["artist"], $_POST["track"],  $_POST["link"]);
+            $this->model->addSong("song", $_POST["params"]);
         }
 
         // where to go after song has been added

@@ -38,13 +38,52 @@ class Modelo{
 		$this->db = new PDO($this->db_type . ':host=' . $this->db_host . ';dbname=' . $this->db_name . ';charset=' . $this->db_charset, $this->db_user, $this->db_pass, $this->db_options);
 	}
 
-	function create ($filtros){
-		$result = $this->db->Execute($filtros);
-		//print_r($result);
-		return $this->db->Insert_ID();
+	function create ($table, $params){
+		$campos = "";
+
+		foreach($params as $clave => $valor){
+
+			$campos .= $clave.",";
+
+			$keys[]=":".$clave;
+			$values[]=$valor;
+		}
+		$campos = substr($campos,0,-1);
+
+		$num_valores = count($params);
+		$sql = "INSERT INTO $table ($campos) VALUES (";
+
+		for($i = 0; $i < $num_valores; $i++){
+
+			$sql .= $keys[$i].",";
+		}
+		$sql = substr($sql,0,-1);
+		$sql .= ")";
+
+		$query = $this->db->prepare($sql);
+		$array_parameters = array();
+
+		for($i = 0; $i < $num_valores; $i++){
+			$clave = $keys[$i];
+			$array_parameters[$clave] = $values[$i];
+		}
+
+		//d($array_parameters);
+		// useful for debugging: you can see the SQL behind above construction by using:
+		// echo '[ PDO DEBUG ]: ' . Helper::debugPDO($sql, $parameters);  exit();
+
+		$query->execute($array_parameters);
+
 	}
 
 	function read($filtros) {
+
+		$sql = "SELECT id, artist, track, link FROM song";
+		$query = $this->db->prepare($sql);
+		$query->execute();
+
+		return $query->fetchAll();
+
 		$result = $this->db->Execute($filtros);
 		return $result;
 	}

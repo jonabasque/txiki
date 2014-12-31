@@ -34,16 +34,12 @@ class Msongs extends Modelo {
      * @param string $track Track
      * @param string $link Link
      */
-    public function addSong($artist, $track, $link)
-    {
-        $sql = "INSERT INTO song (artist, track, link) VALUES (:artist, :track, :link)";
-        $query = $this->db->prepare($sql);
-        $parameters = array(':artist' => $artist, ':track' => $track, ':link' => $link);
+    public function addSong($table, $params) {
 
-        // useful for debugging: you can see the SQL behind above construction by using:
-        // echo '[ PDO DEBUG ]: ' . Helper::debugPDO($sql, $parameters);  exit();
+      //d($table);
+      //d($params);
+      $this->create($table, $params);
 
-        $query->execute($parameters);
     }
 
     /**
