@@ -17,7 +17,7 @@
     <div class="box">
         <h3>Amount of songs (data from second model)</h3>
         <div>
-            <?php echo $amount_of_songs; ?>
+            <?php echo count($amount_of_songs); ?>
         </div>
         <h3>Amount of songs (via AJAX)</h3>
         <div>

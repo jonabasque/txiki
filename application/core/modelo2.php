@@ -76,16 +76,57 @@ class Modelo{
 
 	}
 
-	function read($filtros) {
+	function read($table, $params = null, $count = false) {
 
-		$sql = "SELECT id, artist, track, link FROM song";
-		$query = $this->db->prepare($sql);
-		$query->execute();
+		$count_params = count($params);
 
-		return $query->fetchAll();
+		if($params != null){
+			//Preparo unos arrays de claves y de valores con indices numericos.
+			$campos = "";
 
-		$result = $this->db->Execute($filtros);
-		return $result;
+			foreach($params as $clave => $valor){
+
+				$campos .= $clave.",";
+
+				$keys[]=":".$clave;
+				$values[]= $valor;
+			}
+			$campos = substr($campos,0,-1);
+
+			//Si $count es false queremos un elemento... (por ahora, en esta lógica)
+			if($count == false ){
+
+				$sql = "SELECT ".$params[0]." FROM ".$table."WHERE id = :".$params[0]." LIMIT 1";
+				$query = $this->db->prepare($sql);
+				$parameters = array();
+				$key = $keys[0];
+				$parameters[$key] = $params[$key];
+				$query->execute($parameters);
+				$return = $query->fetch();
+
+			//Si es igual a true es que queremos un conteo....
+			}else{
+				//Si hay más de uno queremos un conteo, de más de un elemento...
+				$alias_count = "amount_of_".$table;
+				$sql = "SELECT COUNT(".$params[0].") AS ".$alias_count." FROM ".$table;
+				$query = $this->db->prepare($sql);
+				$query->execute();
+				$return = $query->fetch()->$alias_count;
+				//TODO: conteo de un solo elemento ahora funionaria??
+			}
+
+		//Si $params == null, es que queremos un gellAll por eso no filtramos.
+		}else{
+
+			$sql = "SELECT * FROM ".$table;
+			$query = $this->db->prepare($sql);
+			$query->execute();
+
+			$return = $query->fetchAll();
+	}
+
+		// fetch() is the PDO method that get exactly one result
+		return $return;
 	}
 
 	function update ($filtros){

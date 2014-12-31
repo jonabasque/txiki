@@ -23,7 +23,7 @@ class Csongs extends Controlador {
 
         // getting all songs and amount of songs
         $songs = $this->model->getAllSongs();
-        $amount_of_songs = $this->model->getAmountOfSongs();
+        $amount_of_songs = $this->model->getAmountOfSongs('song');
         //d(Application::$controller);
        // load views. within the views we can echo out $songs and $amount_of_songs easily
         require APP . 'modulos/songs/Vsongs/index.php';
