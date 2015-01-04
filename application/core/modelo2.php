@@ -79,7 +79,7 @@ class Modelo{
 	function read($table, $params = null, $count = false) {
 
 		$count_params = count($params);
-
+		//d($params);
 		if($params != null){
 			//Preparo unos arrays de claves y de valores con indices numericos.
 			$campos = "";
@@ -92,17 +92,22 @@ class Modelo{
 				$values[]= $valor;
 			}
 			$campos = substr($campos,0,-1);
-
+			//d($keys);
 			//Si $count es false queremos un elemento... (por ahora, en esta lógica)
 			if($count == false ){
-
-				$sql = "SELECT ".$params[0]." FROM ".$table."WHERE id = :".$params[0]." LIMIT 1";
+				$sql = "SELECT * FROM ".$table." WHERE id = ".$keys[0]." LIMIT 1";
+				d($sql);
 				$query = $this->db->prepare($sql);
 				$parameters = array();
 				$key = $keys[0];
-				$parameters[$key] = $params[$key];
+				$value = $values[0];
+				d($key);
+				d($value);
+				$parameters[$key] = $params[$campos];
+				//d($parameters);
 				$query->execute($parameters);
 				$return = $query->fetch();
+				d($return);
 
 			//Si es igual a true es que queremos un conteo....
 			}else{
@@ -129,9 +134,41 @@ class Modelo{
 		return $return;
 	}
 
-	function update ($filtros){
-		$result = $this->db->Execute($filtros);
-		//print_r($result);
+	function update ($table, $params){
+		$campos = "";
+
+		foreach($params as $clave => $valor){
+
+			$campos .= $clave.",";
+
+			$keys[]=":".$clave;
+			$keys2[]= $clave." =";
+			$values[]=$valor;
+		}
+		$campos = substr($campos,0,-1);
+
+		$num_valores = count($params);
+		$sql = "UPDATE ".$table." SET";
+
+		for($i = 0; $i < $num_valores; $i++){
+
+			$sql .= $keys2[$i]." ".$keys[$i].",";
+		}
+		$sql = substr($sql,0,-1);
+		$sql .= ")";
+
+		$query = $this->db->prepare($sql);
+		$array_parameters = array();
+
+		for($i = 0; $i < $num_valores; $i++){
+			$clave = $keys[$i];
+			$array_parameters[$clave] = $values[$i];
+		}
+
+		// useful for debugging: you can see the SQL behind above construction by using:
+		// echo '[ PDO DEBUG ]: ' . Helper::debugPDO($sql, $parameters);  exit();
+
+		$query->execute($array_parameters);
 	}
 
 	function delete ($filtros){

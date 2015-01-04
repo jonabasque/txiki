@@ -45,11 +45,11 @@ define('URL', URL_PROTOCOL . URL_DOMAIN . URL_SUB_FOLDER);
  * Configuration for: Database
  * This is the place where you define your database credentials, database type etc.
  */
-define('DB_TYPE', 'database_type');
-define('DB_HOST', 'domain_name');
-define('DB_NAME', 'databse_name');
-define('DB_USER', 'dabase_user');
-define('DB_PASS', 'database_pass');
+define('DB_TYPE', 'mysql');
+define('DB_HOST', 'localhost');
+define('DB_NAME', 't_TER');
+define('DB_USER', 'root');
+define('DB_PASS', 'joar');
 define('DB_CHARSET', 'utf8');
 define('DB_COLLACTION', 'utf8_unicode_ci');
-define('DB_PREFIX', 'ak_');
+define('DB_PREFIX', 'asketic_');

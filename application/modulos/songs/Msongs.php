@@ -43,7 +43,7 @@ class Msongs extends Modelo {
     {
         $sql = "DELETE FROM song WHERE id = :song_id";
         $query = $this->db->prepare($sql);
-        $parameters = array(':song_id' => $song_id);
+        $parameters = array(':id' => $song_id);
 
         // useful for debugging: you can see the SQL behind above construction by using:
         // echo '[ PDO DEBUG ]: ' . Helper::debugPDO($sql, $parameters);  exit();
@@ -54,8 +54,8 @@ class Msongs extends Modelo {
     /**
      * Get a song from database
      */
-    public function getSong($table, $params, $count = false) {
-      return $this->db->read($table, $params, $count = false);
+    public function getSong($table, $params = false, $count = false) {
+      return $this->read($table, $params, $count = false);
     }
 
     /**
@@ -70,16 +70,9 @@ class Msongs extends Modelo {
      * @param string $link Link
      * @param int $song_id Id
      */
-    public function updateSong($artist, $track, $link, $song_id)
-    {
-        $sql = "UPDATE song SET artist = :artist, track = :track, link = :link WHERE id = :song_id";
-        $query = $this->db->prepare($sql);
-        $parameters = array(':artist' => $artist, ':track' => $track, ':link' => $link, ':song_id' => $song_id);
-
-        // useful for debugging: you can see the SQL behind above construction by using:
-        // echo '[ PDO DEBUG ]: ' . Helper::debugPDO($sql, $parameters);  exit();
-
-        $query->execute($parameters);
+    public function updateSong($table, $params){
+      //d($this->update($table, $params));
+      return $this->update($table, $params);
     }
 
     /**

@@ -75,12 +75,13 @@ class Csongs extends Controlador {
      * This method handles what happens when you move to http://yourproject/songs/editsong
      * @param int $song_id Id of the to-edit song
      */
-    public function editSong_action($song_id)
-    {
+    public function editSong_action($song_id){
+        $params = array("id" => $song_id);
+
         // if we have an id of a song that should be edited
         if (isset($song_id)) {
             // do getSong() in model/model.php
-            $song = $this->model->getSong($song_id);
+            $song = $this->model->getSong('song', $params);
 
             // in a real application we would also check if this db entry exists and therefore show the result or
             // redirect the user to an error page or similar
@@ -103,14 +104,14 @@ class Csongs extends Controlador {
      * This is an example of how to handle a POST request.
      */
     public function updateSong_action(){
-        // if we have POST data to create a new song entry
-        if (isset($_POST["submit_update_song"])) {
-            // do updateSong() from model/model.php
-            $this->model->updateSong($_POST["artist"], $_POST["track"],  $_POST["link"], $_POST['song_id']);
-        }
+      // if we have POST data to create a new song entry
+      if (isset($_POST["submit_update_song"])) {
+        // do updateSong() from model/model.php
+        $this->model->updateSong('song', $_POST['params']);
+      }
 
-        // where to go after song has been added
-        header('location: ' . URL . 'songs/index');
+      // where to go after song has been added
+      header('location: ' . URL . 'songs/index');
     }
 
     /**
