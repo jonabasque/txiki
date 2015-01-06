@@ -58,16 +58,16 @@ class Csongs extends Controlador {
      * This is an example of how to handle a GET request.
      * @param int $song_id Id of the to-delete song
      */
-    public function deleteSong_action($song_id)
-    {
-        // if we have an id of a song that should be deleted
-        if (isset($song_id)) {
-            // do deleteSong() in model/model.php
-            $this->model->deleteSong($song_id);
-        }
+    public function deleteSong_action($song_id){
+      //echo "Hola desde deleteSong_action";
+      // if we have an id of a song that should be deleted
+      if (isset($song_id)) {
+          // do deleteSong() in model/model.php
+          $this->model->deleteSong("song",$song_id);
+      }
 
-        // where to go after song has been deleted
-        header('location: ' . URL . 'songs/index');
+      // where to go after song has been deleted
+      header('location: ' . URL . 'songs/index');
     }
 
      /**

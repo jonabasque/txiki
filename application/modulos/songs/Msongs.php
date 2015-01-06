@@ -39,16 +39,9 @@ class Msongs extends Modelo {
      * add/update/delete stuff!
      * @param int $song_id Id of song
      */
-    public function deleteSong($song_id)
-    {
-        $sql = "DELETE FROM song WHERE id = :song_id";
-        $query = $this->db->prepare($sql);
-        $parameters = array(':id' => $song_id);
-
-        // useful for debugging: you can see the SQL behind above construction by using:
-        // echo '[ PDO DEBUG ]: ' . Helper::debugPDO($sql, $parameters);  exit();
-
-        $query->execute($parameters);
+    public function deleteSong($table, $song_id, $entity = null){
+      echo "Hola desde deleteSong";
+      $this->delete($table, $song_id, $entity);
     }
 
     /**

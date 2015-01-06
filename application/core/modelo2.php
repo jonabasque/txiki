@@ -171,9 +171,21 @@ class Modelo{
 		$query->execute($array_parameters);
 	}
 
-	function delete ($filtros){
-		$result = $this->db->Execute($filtros);
-		//print_r($result);
+	function delete ($table, $params = null, $entity = false){
+		if($params != null){
+			$sql = "DELETE FROM $table WHERE id = :".$params[0];
+			$query = $this->db->prepare($sql);
+			$clave = ":id";
+			$valor = $params[0];
+			//d($valor);
+			$parameters = array();
+			$parameters[$clave] = $valor;
+			//d($parameters);
+			// useful for debugging: you can see the SQL behind above construction by using:
+			// echo '[ PDO DEBUG ]: ' . Helper::debugPDO($sql, $parameters);  exit();
+
+			$query->execute($parameters);
+		}
 	}
 
 }
