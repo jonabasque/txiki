@@ -171,12 +171,14 @@ class Modelo{
 		$query->execute($array_parameters);
 	}
 
-	function delete ($table, $params = null, $entity = false){
-		if($params != null){
-			$sql = "DELETE FROM $table WHERE id = :".$params[0];
+	//eliminado parametro $entity de momento
+	function delete ($table, $song_id = 0){
+		if($song_id != 0){
+			$sql = "DELETE FROM $table WHERE id = ".$song_id;
+			//d($sql);
 			$query = $this->db->prepare($sql);
 			$clave = ":id";
-			$valor = $params[0];
+			$valor = $song_id;
 			//d($valor);
 			$parameters = array();
 			$parameters[$clave] = $valor;
