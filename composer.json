@@ -1,23 +1,19 @@
 {
-    "name": "panique/mini",
+    "name": "Txiki",
     "type": "project",
     "description": "An extremely simple naked PHP application",
     "keywords": ["skeleton", "boilerplate", "naked", "barebone", "application"],
-    "homepage": "https://github.com/panique/mini",
-    "license": "MIT",
+    "homepage": "https://github.com/jonabasque/MahaiJokoak",
+    "license": "AGPL",
     "authors": [
         {
-            "name": "Panique",
+            "name": "jonabasque",
             "role": "Developer"
         }
     ],
-    "support": {
-        "issues": "https://github.com/panique/mini/issues",
-        "source": "https://github.com/panique/mini"
-    },
     "require": {
         "php": ">=5.3.0",
-	"illuminate/database": "*",
-	"raveren/kint": "v0.9"
+	      "raveren/kint": "v0.9",
+        "phpunit/phpunit": "4.4.1"
     }
 }

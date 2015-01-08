@@ -6,6 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    $vendorDir . '/illuminate/support/Illuminate/Support/helpers.php',
     $vendorDir . '/raveren/kint/Kint.class.php',
 );
