@@ -1,3 +1,4 @@
 #Ignora todos los achivos y directorios de /config
 .htaccess
 config.php
+vendor/
