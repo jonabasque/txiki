@@ -39,9 +39,9 @@ class Msongs extends Modelo {
      * add/update/delete stuff!
      * @param int $song_id Id of song
      */
-    public function deleteSong($table, $song_id, $entity = null){
+    public function deleteSong($table, $song_id){
       echo "Hola desde deleteSong";
-      $this->delete($table, $song_id, $entity);
+      $this->delete($table, $song_id);
     }
 
     /**

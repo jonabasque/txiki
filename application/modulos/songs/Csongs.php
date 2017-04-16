@@ -64,9 +64,9 @@ class Csongs extends Controlador {
       if (isset($song_id)) {
           // do deleteSong() in model/model.php
           $this->model->deleteSong("song",$song_id);
-      }
+        }
 
-      // where to go after song has been deleted
+      // redirect user to songs index page (as we don't have a song_id)
       header('location: ' . URL . 'songs/index');
     }
 
